@@ -24,6 +24,11 @@
 #include "wordParse.h"
 #include "intro.h"
 
+/* A C program that does not terminate when Ctrl+C is pressed */
+#include <stdio.h> 
+#include <signal.h> 
+  
+
 #define OFFSET_LEFT 0
 #define OFFSET_RIGHT 20
 #define BIGSTRING_SIZE 408
@@ -44,6 +49,56 @@ static int getCharLoc(int y, int x){
     else
         return 12*(y-5)+(x-27+204);
 }
+
+/* Signal Handler for SIGINT */
+void sigintHandlerC(int sig_num) 
+{ 
+    /* Reset handler to catch SIGINT next time. 
+       Refer http://en.cppreference.com/w/c/program/signal */
+    signal(SIGINT, sigintHandlerC); 
+    mvprintw(15,12, "Ctrl+C doesn,t work! }:-> ");
+    refresh();
+    fflush(stdout); 
+} 
+
+/* Signal Handler for SIGINT */
+void sigintHandlerD(int sig_num) 
+{ 
+    /* Reset handler to catch SIGINT next time. 
+       Refer http://en.cppreference.com/w/c/program/signal */
+    signal(SIGINT, sigintHandlerD); 
+    mvprintw(15,12, "Ctrl+Z doesn,t work! }:-> ");
+    refresh();
+    fflush(stdout); 
+} 
+  
+int main () 
+{ 
+    /* Set the SIGINT (Ctrl-C) signal handler to sigintHandler  
+       Refer http://en.cppreference.com/w/c/program/signal */
+    signal(SIGINT, sigintHandler); 
+  
+    /* Infinite loop */
+    while(1) 
+    {         
+    } 
+    return 0; 
+} 
+
+
+int main () 
+{ 
+    /* Set the SIGINT (Ctrl-C) signal handler to sigintHandler  
+       Refer http://en.cppreference.com/w/c/program/signal */
+    signal(SIGINT, sigintHandler); 
+  
+    /* Infinite loop */
+    while(1) 
+    {         
+    } 
+    return 0; 
+} 
+
 
 void pass(){
 
@@ -250,7 +305,17 @@ void pass(){
             case 0: clear();
                     mvprintw(10,20,"TERMINAL LOCKED");
                     mvprintw(12,12,"PLEASE CONTACT AN ADMINISTRATOR");
+                    // Lock Ctrl+C, Ctrl+Z for autentic
+                    signal(SIGINT, sigintHandlerC);
+                    signal(SIGTSTP, sigintHandlerC);
+                    
                     refresh();
+                    
+                    // Yeah, endless cycle, i know.
+                    while (1)
+                    {
+                        /* code */
+                    }
                     SLEEP(3000000);
                     endwin();
                     if(strlen(getCompleteProg())> 2)
