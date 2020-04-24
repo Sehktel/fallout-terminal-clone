@@ -63,11 +63,11 @@ void sigintHandlerC(int sig_num)
 } 
 
 /* Signal Handler for SIGINT */
-void sigintHandlerD(int sig_num) 
+void sigintHandlerZ(int sig_num) 
 { 
     /* Reset handler to catch SIGINT next time. 
        Refer http://en.cppreference.com/w/c/program/signal */
-    signal(SIGINT, sigintHandlerD); 
+    signal(SIGTSTP, sigintHandlerZ); 
     mvprintw(15,12, "Ctrl+Z doesn,t work! }:-> ");
     refresh();
     fflush(stdout); 
@@ -286,7 +286,7 @@ void pass(){
                     mvprintw(12,12,"PLEASE CONTACT AN ADMINISTRATOR");
                     // Lock Ctrl+C, Ctrl+Z for autentic
                     signal(SIGINT, sigintHandlerC);
-                    signal(SIGTSTP, sigintHandlerC);
+                    signal(SIGTSTP, sigintHandlerZ);
                     
                     refresh();
                     
