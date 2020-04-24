@@ -9,11 +9,9 @@
 #ifdef _WIN32
 #   include <Windows.h>
 #   include <curses.h>
-#   include <cstring>
 #   define SLEEP(delay) Sleep(delay/1000)
 #else
 #   include <ncurses.h>
-#   include <cstring>
 #   include <unistd.h>
 #   define SLEEP(delay) usleep(delay)
 #endif
