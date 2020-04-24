@@ -4,13 +4,16 @@
 // @author Josh Bicking <josh1147582>
 // // // // // // // // // // // // // // // // // // // // // // //
 
+
 #define _BSD_SOURCE // for unistd.h
 #ifdef _WIN32
 #   include <Windows.h>
 #   include <curses.h>
+#   include <cstring>
 #   define SLEEP(delay) Sleep(delay/1000)
 #else
 #   include <ncurses.h>
+#   include <cstring>
 #   include <unistd.h>
 #   define SLEEP(delay) usleep(delay)
 #endif
@@ -72,34 +75,6 @@ void sigintHandlerD(int sig_num)
     fflush(stdout); 
 } 
   
-int main () 
-{ 
-    /* Set the SIGINT (Ctrl-C) signal handler to sigintHandler  
-       Refer http://en.cppreference.com/w/c/program/signal */
-    signal(SIGINT, sigintHandler); 
-  
-    /* Infinite loop */
-    while(1) 
-    {         
-    } 
-    return 0; 
-} 
-
-
-int main () 
-{ 
-    /* Set the SIGINT (Ctrl-C) signal handler to sigintHandler  
-       Refer http://en.cppreference.com/w/c/program/signal */
-    signal(SIGINT, sigintHandler); 
-  
-    /* Infinite loop */
-    while(1) 
-    {         
-    } 
-    return 0; 
-} 
-
-
 void pass(){
 
     // Note: Most of the strings in this function are NOT NUL terminated (they
@@ -114,6 +89,12 @@ void pass(){
 
     // Clear the screen
     erase();
+
+    //Количество строк и столбцов на экране терминала
+    int row, col;   
+
+    //Получаем максимально возможное количество строк и столбцов для окна stdscr и записываем эти данные в row и col
+    getmaxyx(stdscr, row, col); 
 
     // Intro text
     passPrint("ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL",0);
@@ -507,8 +488,9 @@ void pass(){
                     move(y,x+1);
             }
         }
-        if(keyPress==3)     // Ctrl-C
-            exit(0);
+        if(keyPress==3) {;}    // Ctrl-C
+            //exit(0)
+            ;
         if(keyPress=='\n'){ // Enter
             // Get past answers and shift them up along the right.
             // This "log" handles 5 previous commands.
